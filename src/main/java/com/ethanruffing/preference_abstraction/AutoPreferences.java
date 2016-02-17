@@ -57,6 +57,7 @@ public class AutoPreferences implements IPreferences {
             configType = ConfigurationType.LOCAL;
             fileConfig = new XMLConfiguration(new File(
                     c.getPackage().getName() + ".xml"));
+            ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
             prefs = null;
         } else if (new File(
                 System.getProperty("user.home"),
@@ -67,6 +68,7 @@ public class AutoPreferences implements IPreferences {
                     System.getProperty("user.home"),
                     c.getPackage().getName() + ".xml"
             ));
+            ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
             prefs = null;
         } else {
             configType = ConfigurationType.SYSTEM;
@@ -93,12 +95,16 @@ public class AutoPreferences implements IPreferences {
             case LOCAL:
                 fileConfig = new XMLConfiguration(new File(
                         c.getPackage().getName() + ".xml"));
+                fileConfig.setAutoSave(true);
+                ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
                 prefs = null;
             case HOME:
                 fileConfig = new XMLConfiguration(new File(
                         System.getProperty("user.home"),
-                        c.getPackage().getName() + ".xml"
+                        "." + c.getPackage().getName() + ".xml"
                 ));
+                fileConfig.setAutoSave(true);
+                ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
                 prefs = null;
                 break;
             case SYSTEM:
@@ -279,28 +285,6 @@ public class AutoPreferences implements IPreferences {
             return prefs.getBoolean(key, def);
         else
             return fileConfig.getBoolean(key, def);
-    }
-
-    /**
-     * Reads the stored value for an <code>byte[]</code> preference.
-     *
-     * @param key The key that the preference is stored under.
-     * @param def The default value to return if a setting is not found for the
-     *            given key.
-     * @return The value stored for the preference, or the default value on
-     * failure.
-     */
-    @Override
-    public byte[] getByteArray(String key, byte[] def) {
-        if (configType == ConfigurationType.SYSTEM)
-            return prefs.getByteArray(key, def);
-        else {
-            Object val = fileConfig.getProperty(key);
-            if (val == null)
-                return def;
-            else
-                return (byte[]) val;
-        }
     }
 
     /**

@@ -110,17 +110,6 @@ public interface IPreferences {
     boolean getBoolean(String key, boolean def);
 
     /**
-     * Reads the stored value for an <code>byte[]</code> preference.
-     *
-     * @param key The key that the preference is stored under.
-     * @param def The default value to return if a setting is not found for the
-     *            given key.
-     * @return The value stored for the preference, or the default value on
-     * failure.
-     */
-    byte[] getByteArray(String key, byte[] def);
-
-    /**
      * Reads the stored value for an <code>double</code> preference.
      *
      * @param key The key that the preference is stored under.
