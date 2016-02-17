@@ -24,5 +24,17 @@ package com.ethanruffing.preference_abstraction;
  * @since 2016-02-17
  */
 public class SettingNotFoundException extends Exception {
-    
+    public SettingNotFoundException() {
+        super("No setting was found for the specified key.");
+    }
+
+    /**
+     * Constructs a new <code>SettingNotFoundException</code> for the specified
+     * setting.
+     *
+     * @param key The setting that was not found.
+     */
+    public SettingNotFoundException(String key) {
+        super("No setting was found for the key '" + key + "'.");
+    }
 }
