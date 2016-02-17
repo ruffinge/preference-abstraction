@@ -21,6 +21,7 @@ import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import java.io.*;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
@@ -57,7 +58,7 @@ public class AutoPreferences implements IPreferences {
             configType = ConfigurationType.LOCAL;
             fileConfig = new XMLConfiguration(new File(
                     c.getPackage().getName() + ".xml"));
-            ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
+            ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled(true);
             prefs = null;
         } else if (new File(
                 System.getProperty("user.home"),
@@ -68,7 +69,7 @@ public class AutoPreferences implements IPreferences {
                     System.getProperty("user.home"),
                     c.getPackage().getName() + ".xml"
             ));
-            ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
+            ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled(true);
             prefs = null;
         } else {
             configType = ConfigurationType.SYSTEM;
@@ -96,7 +97,8 @@ public class AutoPreferences implements IPreferences {
                 fileConfig = new XMLConfiguration(new File(
                         c.getPackage().getName() + ".xml"));
                 fileConfig.setAutoSave(true);
-                ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
+                ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled
+                        (true);
                 prefs = null;
             case HOME:
                 fileConfig = new XMLConfiguration(new File(
@@ -104,7 +106,8 @@ public class AutoPreferences implements IPreferences {
                         "." + c.getPackage().getName() + ".xml"
                 ));
                 fileConfig.setAutoSave(true);
-                ((XMLConfiguration)fileConfig).setDelimiterParsingDisabled(true);
+                ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled
+                        (true);
                 prefs = null;
                 break;
             case SYSTEM:
@@ -122,6 +125,23 @@ public class AutoPreferences implements IPreferences {
      */
     public void migrate(ConfigurationType destination) {
 
+    }
+
+    /**
+     * Deletes all preferences stored for the class.
+     */
+    @Override
+    public void clear() {
+        if (configType == ConfigurationType.SYSTEM) {
+            try {
+                prefs.clear();
+            } catch (BackingStoreException e) {
+                e.printStackTrace();
+            }
+        } else {
+            fileConfig.clear();
+            fileConfig.getFile().delete();
+        }
     }
 
     /**

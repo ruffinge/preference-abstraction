@@ -24,6 +24,11 @@ package com.ethanruffing.preference_abstraction;
  */
 public interface IPreferences {
     /**
+     * Deletes all preferences stored for the class.
+     */
+    void clear();
+
+    /**
      * Stores a boolean in the preferences, overwriting any identically-named
      * properties.
      *

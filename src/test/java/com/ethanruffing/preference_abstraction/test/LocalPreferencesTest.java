@@ -18,6 +18,7 @@ package com.ethanruffing.preference_abstraction.test;
 
 import com.ethanruffing.preference_abstraction.AutoPreferences;
 import com.ethanruffing.preference_abstraction.ConfigurationType;
+import org.junit.After;
 import org.junit.Before;
 
 /**
@@ -30,5 +31,10 @@ public class LocalPreferencesTest extends PreferencesTest {
     @Before
     public void setUp() throws Exception {
         prefs = new AutoPreferences(getClass(), ConfigurationType.LOCAL);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        prefs.clear();
     }
 }
