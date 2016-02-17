@@ -23,10 +23,17 @@ package com.ethanruffing.preference_abstraction;
  * @since 2016-02-17
  */
 public enum ConfigurationType {
-    /** Stored in a file in the same directory as the executable. */
+    /**
+     * Stored in a file in the same directory as the executable.
+     */
     LOCAL,
-    /** Stored in the user's home directory. */
+    /**
+     * Stored in the user's home directory.
+     */
     HOME,
-    /** Stored in the system's standard preferences structure. */
+    /**
+     * Stored in the system's standard preferences structure using the {@link
+     * java.util.prefs Java Preferences API}.
+     */
     SYSTEM
 }

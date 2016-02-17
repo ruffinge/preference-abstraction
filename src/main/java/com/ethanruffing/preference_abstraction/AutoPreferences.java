@@ -58,12 +58,13 @@ public class AutoPreferences {
             fileConfig = new XMLConfiguration(new File(
                     c.getPackage().getName() + ".xml"));
             prefs = null;
-        } else if (new File(System.getProperty("user.home"),
+        } else if (new File(
+                System.getProperty("user.home"),
                 c.getPackage().getName() + ".xml"
         ).exists()) {
             configType = ConfigurationType.HOME;
-            fileConfig = new XMLConfiguration(new File(System.getProperty(
-                    "user.home"),
+            fileConfig = new XMLConfiguration(new File(
+                    System.getProperty("user.home"),
                     c.getPackage().getName() + ".xml"
             ));
             prefs = null;
@@ -94,8 +95,8 @@ public class AutoPreferences {
                         c.getPackage().getName() + ".xml"));
                 prefs = null;
             case HOME:
-                fileConfig = new XMLConfiguration(new File(System.getProperty(
-                        "user.home"),
+                fileConfig = new XMLConfiguration(new File(
+                        System.getProperty("user.home"),
                         c.getPackage().getName() + ".xml"
                 ));
                 prefs = null;
@@ -108,7 +109,7 @@ public class AutoPreferences {
     }
 
     /**
-     * Migrates the settings to a new storage
+     * Migrates the settings to a new storage location.
      *
      * @param destination The type of configuration that the preferences should
      *                    be moved to.
@@ -256,30 +257,114 @@ public class AutoPreferences {
     }
 
     /**
-     * Reads the stored value for a String preference.
-     *
-     * @param key The key that the preference is stored under.
-     * @return The value stored for the preference.
-     * @throws SettingNotFoundException Thrown if the specified setting is not
-     *                                  found in the chosen storage system.
-     */
-    public String getString(String key) throws SettingNotFoundException {
-        String val = (configType == ConfigurationType.SYSTEM) ? prefs.get(key,
-                null
-        ) : fileConfig.getString(key, null);
-        if (val == null)
-            throw new SettingNotFoundException(key);
-        else
-            return val;
-    }
-
-    /**
-     * Reads the stored value for an Object preference.
+     * Reads the stored value for an <code>boolean</code> preference.
      *
      * @param key The key that the preference is stored under.
      * @param def The default value to return if a setting is not found for the
      *            given key.
-     * @return The value stored for the preference.
+     * @return The value stored for the preference, or the default value on
+     * failure.
+     */
+    public boolean getBoolean(String key, boolean def) {
+        if (configType == ConfigurationType.SYSTEM)
+            return prefs.getBoolean(key, def);
+        else
+            return fileConfig.getBoolean(key, def);
+    }
+
+    /**
+     * Reads the stored value for an <code>byte[]</code> preference.
+     *
+     * @param key The key that the preference is stored under.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
+     */
+    public byte[] getByteArray(String key, byte[] def) {
+        if (configType == ConfigurationType.SYSTEM)
+            return prefs.getByteArray(key, def);
+        else {
+            Object val = fileConfig.getProperty(key);
+            if (val == null)
+                return def;
+            else
+                return (byte[]) val;
+        }
+    }
+
+    /**
+     * Reads the stored value for an <code>double</code> preference.
+     *
+     * @param key The key that the preference is stored under.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
+     */
+    public double getDouble(String key, double def) {
+        if (configType == ConfigurationType.SYSTEM)
+            return prefs.getDouble(key, def);
+        else
+            return fileConfig.getDouble(key, def);
+    }
+
+    /**
+     * Reads the stored value for an <code>float</code> preference.
+     *
+     * @param key The key that the preference is stored under.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
+     */
+    public float getFloat(String key, float def) {
+        if (configType == ConfigurationType.SYSTEM)
+            return prefs.getFloat(key, def);
+        else
+            return fileConfig.getFloat(key, def);
+    }
+
+    /**
+     * Reads the stored value for an <code>int</code> preference.
+     *
+     * @param key The key that the preference is stored under.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
+     */
+    public int getInt(String key, int def) {
+        if (configType == ConfigurationType.SYSTEM)
+            return prefs.getInt(key, def);
+        else
+            return fileConfig.getInt(key, def);
+    }
+
+    /**
+     * Reads the stored value for a <code>long</code> preference.
+     *
+     * @param key The key that the preference is stored under.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
+     */
+    public long getLong(String key, long def) {
+        if (configType == ConfigurationType.SYSTEM)
+            return prefs.getLong(key, def);
+        else
+            return fileConfig.getLong(key, def);
+    }
+
+    /**
+     * Reads the stored value for a String preference.
+     *
+     * @param key The key that the preference is stored under.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
      */
     public String getString(String key, String def) {
         if (configType == ConfigurationType.SYSTEM)
@@ -292,15 +377,16 @@ public class AutoPreferences {
      * Reads the stored value for an Object preference.
      *
      * @param key The key that the preference is stored under.
-     * @return The value stored for the preference.
-     * @throws SettingNotFoundException Thrown if the specified setting is not
-     *                                  found in the chosen storage system.
+     * @param def The default value to return if a setting is not found for the
+     *            given key.
+     * @return The value stored for the preference, or the default value on
+     * failure.
      */
-    public Object getObject(String key) throws SettingNotFoundException {
+    public Object getObject(String key, Object def) {
         if (configType == ConfigurationType.SYSTEM) {
             byte[] inArr = prefs.getByteArray(key, null);
             if (inArr == null)
-                throw new SettingNotFoundException(key);
+                return def;
 
             ByteArrayInputStream bis = new ByteArrayInputStream(inArr);
             ObjectInput in = null;
@@ -309,7 +395,7 @@ public class AutoPreferences {
                 return in.readObject();
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
-                throw new SettingNotFoundException(key);
+                return def;
             } finally {
                 try {
                     bis.close();
@@ -327,25 +413,9 @@ public class AutoPreferences {
         } else {
             Object val = fileConfig.getProperty(key);
             if (val == null)
-                throw new SettingNotFoundException(key);
+                return def;
             else
                 return val;
-        }
-    }
-
-    /**
-     * Reads the stored value for an Object preference.
-     *
-     * @param key The key that the preference is stored under.
-     * @param def The default value to return if a setting is not found for the
-     *            given key.
-     * @return The value stored for the preference.
-     */
-    public Object getObject(String key, Object def) {
-        try {
-            return getObject(key);
-        } catch (SettingNotFoundException e) {
-            return def;
         }
     }
 }
