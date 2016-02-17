@@ -38,7 +38,7 @@ import java.util.prefs.Preferences;
  * @author Ethan Ruffing
  * @since 2016-02-17
  */
-public class AutoPreferences {
+public class AutoPreferences implements IPreferences {
     private FileConfiguration fileConfig;
     private Preferences prefs;
     private ConfigurationType configType;
@@ -119,82 +119,13 @@ public class AutoPreferences {
     }
 
     /**
-     * Stores a string in the preferences, overwriting any identically-named
-     * properties.
-     *
-     * @param key   The key to store the string under.
-     * @param value The string to store.
-     */
-    public void put(String key, String value) {
-        if (configType == ConfigurationType.SYSTEM)
-            prefs.put(key, value);
-        else
-            fileConfig.setProperty(key, value);
-    }
-
-    /**
-     * Stores an integer in the preferences, overwriting any identically-named
-     * properties.
-     *
-     * @param key   The key to store the int under.
-     * @param value The int to store.
-     */
-    public void put(String key, int value) {
-        if (configType == ConfigurationType.SYSTEM)
-            prefs.putInt(key, value);
-        else
-            fileConfig.setProperty(key, value);
-    }
-
-    /**
-     * Stores a float in the preferences, overwriting any identically-named
-     * properties.
-     *
-     * @param key   The key to store the float under.
-     * @param value The float to store.
-     */
-    public void put(String key, float value) {
-        if (configType == ConfigurationType.SYSTEM)
-            prefs.putFloat(key, value);
-        else
-            fileConfig.setProperty(key, value);
-    }
-
-    /**
-     * Stores a double in the preferences, overwriting any identically-named
-     * properties.
-     *
-     * @param key   The key to store the double under.
-     * @param value The double to store.
-     */
-    public void put(String key, double value) {
-        if (configType == ConfigurationType.SYSTEM)
-            prefs.putDouble(key, value);
-        else
-            fileConfig.setProperty(key, value);
-    }
-
-    /**
-     * Stores a long in the preferences, overwriting any identically-named
-     * properties.
-     *
-     * @param key   The key to store the long under.
-     * @param value The long to store.
-     */
-    public void put(String key, long value) {
-        if (configType == ConfigurationType.SYSTEM)
-            prefs.putLong(key, value);
-        else
-            fileConfig.setProperty(key, value);
-    }
-
-    /**
      * Stores a boolean in the preferences, overwriting any identically-named
      * properties.
      *
      * @param key   The key to store the boolean under.
      * @param value The boolean to store.
      */
+    @Override
     public void put(String key, boolean value) {
         if (configType == ConfigurationType.SYSTEM)
             prefs.putBoolean(key, value);
@@ -209,9 +140,70 @@ public class AutoPreferences {
      * @param key   The key to store the byte array under.
      * @param value The byte array to store.
      */
+    @Override
     public void put(String key, byte[] value) {
         if (configType == ConfigurationType.SYSTEM)
             prefs.putByteArray(key, value);
+        else
+            fileConfig.setProperty(key, value);
+    }
+
+    /**
+     * Stores a double in the preferences, overwriting any identically-named
+     * properties.
+     *
+     * @param key   The key to store the double under.
+     * @param value The double to store.
+     */
+    @Override
+    public void put(String key, double value) {
+        if (configType == ConfigurationType.SYSTEM)
+            prefs.putDouble(key, value);
+        else
+            fileConfig.setProperty(key, value);
+    }
+
+    /**
+     * Stores a float in the preferences, overwriting any identically-named
+     * properties.
+     *
+     * @param key   The key to store the float under.
+     * @param value The float to store.
+     */
+    @Override
+    public void put(String key, float value) {
+        if (configType == ConfigurationType.SYSTEM)
+            prefs.putFloat(key, value);
+        else
+            fileConfig.setProperty(key, value);
+    }
+
+    /**
+     * Stores an integer in the preferences, overwriting any identically-named
+     * properties.
+     *
+     * @param key   The key to store the int under.
+     * @param value The int to store.
+     */
+    @Override
+    public void put(String key, int value) {
+        if (configType == ConfigurationType.SYSTEM)
+            prefs.putInt(key, value);
+        else
+            fileConfig.setProperty(key, value);
+    }
+
+    /**
+     * Stores a long in the preferences, overwriting any identically-named
+     * properties.
+     *
+     * @param key   The key to store the long under.
+     * @param value The long to store.
+     */
+    @Override
+    public void put(String key, long value) {
+        if (configType == ConfigurationType.SYSTEM)
+            prefs.putLong(key, value);
         else
             fileConfig.setProperty(key, value);
     }
@@ -226,6 +218,7 @@ public class AutoPreferences {
      * @param key   The key to store the object under.
      * @param value The object to store.
      */
+    @Override
     public void put(String key, Object value) {
         if (configType == ConfigurationType.SYSTEM) {
             // Translate to a byte array.
@@ -257,6 +250,21 @@ public class AutoPreferences {
     }
 
     /**
+     * Stores a string in the preferences, overwriting any identically-named
+     * properties.
+     *
+     * @param key   The key to store the string under.
+     * @param value The string to store.
+     */
+    @Override
+    public void put(String key, String value) {
+        if (configType == ConfigurationType.SYSTEM)
+            prefs.put(key, value);
+        else
+            fileConfig.setProperty(key, value);
+    }
+
+    /**
      * Reads the stored value for an <code>boolean</code> preference.
      *
      * @param key The key that the preference is stored under.
@@ -265,6 +273,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public boolean getBoolean(String key, boolean def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.getBoolean(key, def);
@@ -281,6 +290,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public byte[] getByteArray(String key, byte[] def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.getByteArray(key, def);
@@ -302,6 +312,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public double getDouble(String key, double def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.getDouble(key, def);
@@ -318,6 +329,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public float getFloat(String key, float def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.getFloat(key, def);
@@ -334,6 +346,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public int getInt(String key, int def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.getInt(key, def);
@@ -350,6 +363,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public long getLong(String key, long def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.getLong(key, def);
@@ -366,6 +380,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public String getString(String key, String def) {
         if (configType == ConfigurationType.SYSTEM)
             return prefs.get(key, def);
@@ -382,6 +397,7 @@ public class AutoPreferences {
      * @return The value stored for the preference, or the default value on
      * failure.
      */
+    @Override
     public Object getObject(String key, Object def) {
         if (configType == ConfigurationType.SYSTEM) {
             byte[] inArr = prefs.getByteArray(key, null);
