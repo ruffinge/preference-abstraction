@@ -8,5 +8,13 @@
     <artifactId>preference-abstraction</artifactId>
     <version>0.0</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+        </dependency>
+    </dependencies>
+
 
 </project>
