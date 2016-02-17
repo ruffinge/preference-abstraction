@@ -7,6 +7,32 @@
     <groupId>com.ethanruffing</groupId>
     <artifactId>preference-abstraction</artifactId>
     <version>0.1</version>
+    <description>
+        A library for abstracting various methods of storing
+        application preferences in Java.
+    </description>
+    <url>https://bitbucket.org/eruffing/preference-abstraction/overview</url>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>ruffinge</id>
+            <name>Ethan Ruffing</name>
+            <email>ethan@ethanruffing.com</email>
+            <url>http://www.ethanruffing.com/</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>America/Detroit</timezone>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -31,4 +57,34 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
