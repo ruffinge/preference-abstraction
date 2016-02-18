@@ -4,15 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ethanruffing</groupId>
+    <groupId>com.ethanruffing.preferenceabstraction</groupId>
     <artifactId>preference-abstraction</artifactId>
     <version>0.1.1</version>
     <description>
-        A library for abstracting various methods of storing
-        application preferences in Java.
+        A library for abstracting various methods of storing application
+        preferences in Java.
     </description>
-    <url>https://bitbucket.org/eruffing/preference-abstraction/overview</url>
+    <url>https://github.com/ruffinge/preference-abstraction</url>
     <inceptionYear>2016</inceptionYear>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -20,19 +21,22 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <id>ruffinge</id>
             <name>Ethan Ruffing</name>
             <email>ethan@ethanruffing.com</email>
             <url>http://www.ethanruffing.com/</url>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
             <timezone>America/Detroit</timezone>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/ruffinge/preference-abstraction.git</connection>
+        <developerConnection>scm:git:https://github.com/ruffinge/preference-abstraction.git</developerConnection>
+        <url>https://github.com/ruffinge/preference-abstraction</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -57,6 +61,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -87,7 +92,9 @@
                 <version>2.10.3</version>
                 <configuration>
                     <links>
-                        <link>http://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/</link>
+                        <link>
+                            http://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/
+                        </link>
                         <link>http://docs.oracle.com/javase/8/javafx/api</link>
                     </links>
                     <detectLinks/>
