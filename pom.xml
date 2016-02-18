@@ -6,7 +6,7 @@
 
     <groupId>com.ethanruffing.preferenceabstraction</groupId>
     <artifactId>preference-abstraction</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <description>
         A library for abstracting various methods of storing application
         preferences in Java.
@@ -33,8 +33,12 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/ruffinge/preference-abstraction.git</connection>
-        <developerConnection>scm:git:https://github.com/ruffinge/preference-abstraction.git</developerConnection>
+        <connection>
+            scm:git:https://github.com/ruffinge/preference-abstraction.git
+        </connection>
+        <developerConnection>
+            scm:git:https://github.com/ruffinge/preference-abstraction.git
+        </developerConnection>
         <url>https://github.com/ruffinge/preference-abstraction</url>
     </scm>
 
@@ -62,53 +66,192 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <build>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
+            </url>
+        </repository>
+        <site>
+            <id>site</id>
+            <url>http://www.ethanruffing.com/preference-abstraction/</url>
+        </site>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-site-plugin</artifactId>
+                            <configuration>
+                                <skipDeploy>true</skipDeploy>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/test/*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.3</version>
+                        <configuration>
+                            <show>protected</show>
+                            <links>
+                                <link>
+                                    http://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/
+                                </link>
+                                <link>
+                                    http://docs.oracle.com/javase/8/javafx/api
+                                </link>
+                            </links>
+                            <detectLinks/>
+                            <detectJavaApiLink/>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.3</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>stage-for-scm-publish</id>
+                                <phase>post-site</phase>
+                                <goals>
+                                    <goal>stage</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- MSITE-652: configuration won't be necessary with m-site-p 3.2 -->
+                                    <skipDeploy>false</skipDeploy>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-publish-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>scm-publish</id>
+                                <phase>site-deploy</phase>
+                                <goals>
+                                    <goal>publish-scm</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <checkoutDirectory>
+                                ${project.build.directory}/scmpublish
+                            </checkoutDirectory>
+                            <checkinComment>Publishing javadoc for
+                                ${project.artifactId}:${project.version}
+                            </checkinComment>
+                            <content>${project.reporting.outputDirectory}
+                            </content>
+                            <skipDeletedFiles>false</skipDeletedFiles>
+                            <tryUpdate>true</tryUpdate>
+                            <pubScmUrl>
+                                scm:git:https://github.com/ruffinge/preference-abstraction.git
+                            </pubScmUrl>
+                            <scmBranch>gh-pages
+                            </scmBranch> <!-- branch with static site -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <reporting>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/test/*</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.8.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
-                <configuration>
-                    <links>
-                        <link>
-                            http://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/
-                        </link>
-                        <link>http://docs.oracle.com/javase/8/javafx/api</link>
-                    </links>
-                    <detectLinks/>
-                    <detectJavaApiLink/>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <reportSets>
+                    <reportSet><!-- by default, id = "default" -->
+                        <reports><!-- select non-aggregate reports -->
+                            <report>javadoc</report>
+                            <report>test-javadoc</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet><!-- aggregate reportSet, to define in poms having modules -->
+                        <id>aggregate</id>
+                        <inherited>false
+                        </inherited><!-- don't run aggregate in child modules -->
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
         </plugins>
-    </build>
+    </reporting>
 </project>
