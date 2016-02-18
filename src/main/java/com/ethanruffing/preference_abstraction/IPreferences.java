@@ -16,6 +16,8 @@
 
 package com.ethanruffing.preference_abstraction;
 
+import java.util.List;
+
 /**
  * An interface for a system for accessing a preferences store.
  *
@@ -27,6 +29,13 @@ public interface IPreferences {
      * Deletes all preferences stored for the class.
      */
     void clear();
+
+    /**
+     * Produces a list of all stored keys.
+     *
+     * @return A list of keys for all preferences currently stored.
+     */
+    List<String> getKeys();
 
     /**
      * Stores a boolean in the preferences, overwriting any identically-named
