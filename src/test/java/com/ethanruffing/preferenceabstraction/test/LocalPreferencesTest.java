@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction.test;
+package com.ethanruffing.preferenceabstraction.test;
 
-import com.ethanruffing.preference_abstraction.AutoPreferences;
-import com.ethanruffing.preference_abstraction.ConfigurationType;
+import com.ethanruffing.preferenceabstraction.AutoPreferences;
+import com.ethanruffing.preferenceabstraction.ConfigurationType;
 import org.junit.After;
 import org.junit.Before;
 
 /**
- * A class for testing preferences stored in the system's native settings
- * storage area.
+ * A class for testing preferences stored in a local file.
  *
  * @author Ethan Ruffing
  * @since 2016-02-17
  */
-public class SystemPreferencesTest extends PreferencesTest {
+public class LocalPreferencesTest extends PreferencesTest {
     @Before
     public void setUp() throws Exception {
-        prefs = new AutoPreferences(getClass(), ConfigurationType.SYSTEM);
+        prefs = new AutoPreferences(getClass(), ConfigurationType.LOCAL);
     }
 
     @After

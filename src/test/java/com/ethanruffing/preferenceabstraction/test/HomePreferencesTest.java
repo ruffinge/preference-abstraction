@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction;
+package com.ethanruffing.preferenceabstraction.test;
+
+import com.ethanruffing.preferenceabstraction.AutoPreferences;
+import com.ethanruffing.preferenceabstraction.ConfigurationType;
+import org.junit.After;
+import org.junit.Before;
 
 /**
- * An enumeration of possible configuration sources.
+ * A class for testing preferences stored in a file in the user's home
+ * directory.
  *
  * @author Ethan Ruffing
  * @since 2016-02-17
  */
-public enum ConfigurationType {
-    /**
-     * Stored in a file in the same directory as the executable.
-     */
-    LOCAL,
-    /**
-     * Stored in the user's home directory.
-     */
-    HOME,
-    /**
-     * Stored in the system's standard preferences structure using the {@link
-     * java.util.prefs Java Preferences API}.
-     */
-    SYSTEM
+public class HomePreferencesTest extends PreferencesTest {
+    @Before
+    public void setUp() throws Exception {
+        prefs = new AutoPreferences(getClass(), ConfigurationType.HOME);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        prefs.clear();
+    }
 }

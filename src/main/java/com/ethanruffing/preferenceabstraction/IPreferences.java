@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction;
+package com.ethanruffing.preferenceabstraction;
 
 import java.util.List;
 

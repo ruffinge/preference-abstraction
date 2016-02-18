@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction.test;
-
-import com.ethanruffing.preference_abstraction.AutoPreferences;
-import com.ethanruffing.preference_abstraction.ConfigurationType;
-import org.junit.After;
-import org.junit.Before;
+package com.ethanruffing.preferenceabstraction;
 
 /**
- * A class for testing preferences stored in a file in the user's home
- * directory.
+ * This exception is thrown when errors occur during the process of converting
+ * from one type of preference storage to another.
  *
  * @author Ethan Ruffing
- * @since 2016-02-17
+ * @since 2016-02-18
  */
-public class HomePreferencesTest extends PreferencesTest {
-    @Before
-    public void setUp() throws Exception {
-        prefs = new AutoPreferences(getClass(), ConfigurationType.HOME);
+public class PreferenceMigrationException extends Exception {
+    public PreferenceMigrationException() {
+        super("Error while migrating preferences.");
     }
 
-    @After
-    public void tearDown() throws Exception {
-        prefs.clear();
+    public PreferenceMigrationException(Throwable cause) {
+        super("Error while migrating preferences.", cause);
     }
 }

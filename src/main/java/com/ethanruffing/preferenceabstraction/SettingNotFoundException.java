@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction;
+package com.ethanruffing.preferenceabstraction;
 
 /**
  * This exception is thrown when an attempt is made to read a setting that
