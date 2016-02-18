@@ -6,7 +6,7 @@
 
     <groupId>com.ethanruffing</groupId>
     <artifactId>preference-abstraction</artifactId>
-    <version>0.1</version>
+    <version>0.1.1</version>
     <description>
         A library for abstracting various methods of storing
         application preferences in Java.
@@ -61,6 +61,15 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/test/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.0</version>
                 <executions>
@@ -76,6 +85,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
+                <configuration>
+                    <links>
+                        <link>http://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/</link>
+                        <link>http://docs.oracle.com/javase/8/javafx/api</link>
+                    </links>
+                    <detectLinks/>
+                    <detectJavaApiLink/>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

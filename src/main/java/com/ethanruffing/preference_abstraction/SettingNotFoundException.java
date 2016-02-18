@@ -24,6 +24,10 @@ package com.ethanruffing.preference_abstraction;
  * @since 2016-02-17
  */
 public class SettingNotFoundException extends Exception {
+    /**
+     * Constructs a new <code>SettingNotFoundException</code> with a generic
+     * message for any key.
+     */
     public SettingNotFoundException() {
         super("No setting was found for the specified key.");
     }
@@ -36,5 +40,16 @@ public class SettingNotFoundException extends Exception {
      */
     public SettingNotFoundException(String key) {
         super("No setting was found for the key '" + key + "'.");
+    }
+
+    /**
+     * Constructs a new <code>SettingNotFoundException</code> for the specified
+     * setting.
+     *
+     * @param key   The setting that was not found.
+     * @param cause The inner exception that lead to the key not being found.
+     */
+    public SettingNotFoundException(String key, Throwable cause) {
+        super("No setting was found for the key '" + key + "'.", cause);
     }
 }

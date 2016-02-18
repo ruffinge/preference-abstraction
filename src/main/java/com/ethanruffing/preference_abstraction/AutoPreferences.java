@@ -16,11 +16,15 @@
 
 package com.ethanruffing.preference_abstraction;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -40,6 +44,7 @@ import java.util.prefs.Preferences;
  * @since 2016-02-17
  */
 public class AutoPreferences implements IPreferences {
+    private Class<?> prefsFor;
     private FileConfiguration fileConfig;
     private Preferences prefs;
     private ConfigurationType configType;
@@ -54,29 +59,18 @@ public class AutoPreferences implements IPreferences {
      *                                the configuration file.
      */
     public AutoPreferences(Class<?> c) throws ConfigurationException {
+        prefs = null;
+        fileConfig = null;
         if (new File(c.getPackage().getName() + ".xml").exists()) {
-            configType = ConfigurationType.LOCAL;
-            fileConfig = new XMLConfiguration(new File(
-                    c.getPackage().getName() + ".xml"));
-            ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled(true);
-            prefs = null;
+            setup(c, ConfigurationType.LOCAL);
         } else if (new File(
                 System.getProperty("user.home"),
                 c.getPackage().getName() + ".xml"
         ).exists()) {
-            configType = ConfigurationType.HOME;
-            fileConfig = new XMLConfiguration(new File(
-                    System.getProperty("user.home"),
-                    c.getPackage().getName() + ".xml"
-            ));
-            ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled(true);
-            prefs = null;
+            setup(c, ConfigurationType.HOME);
         } else {
-            configType = ConfigurationType.SYSTEM;
-            fileConfig = null;
-            prefs = Preferences.userNodeForPackage(c);
+            setup(c, ConfigurationType.SYSTEM);
         }
-
     }
 
     /**
@@ -91,6 +85,23 @@ public class AutoPreferences implements IPreferences {
      */
     public AutoPreferences(Class<?> c, ConfigurationType configType)
             throws ConfigurationException {
+        prefs = null;
+        fileConfig = null;
+        setup(c, configType);
+    }
+
+    /**
+     * Sets this up for the given class, forcing use of the specified storage
+     * system. Defaults to using an XML file if using file-based storage.
+     *
+     * @param c          The class for which the preferences are to be stored.
+     * @param configType The storage system to use for the preferences.
+     * @throws ConfigurationException Thrown if an error occurs while loading
+     *                                the configuration file.
+     */
+    private void setup(Class<?> c, ConfigurationType configType)
+            throws ConfigurationException {
+        prefsFor = c;
         this.configType = configType;
         switch (configType) {
             case LOCAL:
@@ -99,7 +110,6 @@ public class AutoPreferences implements IPreferences {
                 fileConfig.setAutoSave(true);
                 ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled
                         (true);
-                prefs = null;
             case HOME:
                 fileConfig = new XMLConfiguration(new File(
                         System.getProperty("user.home"),
@@ -108,10 +118,8 @@ public class AutoPreferences implements IPreferences {
                 fileConfig.setAutoSave(true);
                 ((XMLConfiguration) fileConfig).setDelimiterParsingDisabled
                         (true);
-                prefs = null;
                 break;
             case SYSTEM:
-                fileConfig = null;
                 prefs = Preferences.userNodeForPackage(c);
                 break;
         }
@@ -122,9 +130,19 @@ public class AutoPreferences implements IPreferences {
      *
      * @param destination The type of configuration that the preferences should
      *                    be moved to.
+     * @return The converted preference store.
+     * @throws PreferenceMigrationException Thrown if an error occurs while
+     *                                      migrating the preferences.
      */
-    public void migrate(ConfigurationType destination) {
-
+    public AutoPreferences convert(ConfigurationType destination)
+            throws PreferenceMigrationException {
+        try {
+            AutoPreferences ap = new AutoPreferences(prefsFor, destination);
+            getKeys().forEach(key -> ap.put(key, getString(key, "")));
+            return ap;
+        } catch (ConfigurationException e) {
+            throw new PreferenceMigrationException(e);
+        }
     }
 
     /**
@@ -141,6 +159,25 @@ public class AutoPreferences implements IPreferences {
         } else {
             fileConfig.clear();
             fileConfig.getFile().delete();
+        }
+    }
+
+    /**
+     * Produces a list of all stored keys.
+     *
+     * @return A list of keys for all preferences currently stored.
+     */
+    @Override
+    public List<String> getKeys() {
+        if (configType == ConfigurationType.SYSTEM) {
+            try {
+                return Arrays.asList(prefs.keys());
+            } catch (BackingStoreException e) {
+                e.printStackTrace();
+                return new ArrayList<String>();
+            }
+        } else {
+            return IteratorUtils.toList(fileConfig.getKeys());
         }
     }
 
