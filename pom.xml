@@ -76,12 +76,27 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
             </url>
         </repository>
+        <site>
+            <id>site</id>
+            <url>http://www.ethanruffing.com/preference-abstraction/</url>
+        </site>
     </distributionManagement>
 
     <profiles>
         <profile>
             <id>release</id>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-site-plugin</artifactId>
+                            <configuration>
+                                <skipDeploy>true</skipDeploy>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -110,6 +125,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>2.10.3</version>
                         <configuration>
+                            <show>protected</show>
                             <links>
                                 <link>
                                     http://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/
@@ -155,8 +171,87 @@
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>stage-for-scm-publish</id>
+                                <phase>post-site</phase>
+                                <goals>
+                                    <goal>stage</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- MSITE-652: configuration won't be necessary with m-site-p 3.2 -->
+                                    <skipDeploy>false</skipDeploy>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-publish-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>scm-publish</id>
+                                <phase>site-deploy</phase>
+                                <goals>
+                                    <goal>publish-scm</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <checkoutDirectory>
+                                ${project.build.directory}/scmpublish
+                            </checkoutDirectory>
+                            <checkinComment>Publishing javadoc for
+                                ${project.artifactId}:${project.version}
+                            </checkinComment>
+                            <content>${project.reporting.outputDirectory}
+                            </content>
+                            <skipDeletedFiles>false</skipDeletedFiles>
+                            <tryUpdate>true</tryUpdate>
+                            <pubScmUrl>
+                                scm:git:https://github.com/ruffinge/preference-abstraction.git
+                            </pubScmUrl>
+                            <scmBranch>gh-pages
+                            </scmBranch> <!-- branch with static site -->
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <reportSets>
+                    <reportSet><!-- by default, id = "default" -->
+                        <reports><!-- select non-aggregate reports -->
+                            <report>javadoc</report>
+                            <report>test-javadoc</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet><!-- aggregate reportSet, to define in poms having modules -->
+                        <id>aggregate</id>
+                        <inherited>false
+                        </inherited><!-- don't run aggregate in child modules -->
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
