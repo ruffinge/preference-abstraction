@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction;
+package com.ethanruffing.preferenceabstraction;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.configuration.ConfigurationException;

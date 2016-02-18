@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction;
+package com.ethanruffing.preferenceabstraction;
 
 /**
- * This exception is thrown when errors occur during the process of converting
- * from one type of preference storage to another.
+ * An enumeration of possible configuration sources.
  *
  * @author Ethan Ruffing
- * @since 2016-02-18
+ * @since 2016-02-17
  */
-public class PreferenceMigrationException extends Exception {
-    public PreferenceMigrationException() {
-        super("Error while migrating preferences.");
-    }
-
-    public PreferenceMigrationException(Throwable cause) {
-        super("Error while migrating preferences.", cause);
-    }
+public enum ConfigurationType {
+    /**
+     * Stored in a file in the same directory as the executable.
+     */
+    LOCAL,
+    /**
+     * Stored in the user's home directory.
+     */
+    HOME,
+    /**
+     * Stored in the system's standard preferences structure using the {@link
+     * java.util.prefs Java Preferences API}.
+     */
+    SYSTEM
 }

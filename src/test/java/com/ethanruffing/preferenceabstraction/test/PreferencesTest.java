@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction.test;
+package com.ethanruffing.preferenceabstraction.test;
 
-import com.ethanruffing.preference_abstraction.IPreferences;
+import com.ethanruffing.preferenceabstraction.IPreferences;
 import org.junit.Assert;
 
 import java.math.BigDecimal;

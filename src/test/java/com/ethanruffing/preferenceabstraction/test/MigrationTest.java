@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.ethanruffing.preference_abstraction.test;
+package com.ethanruffing.preferenceabstraction.test;
 
-import com.ethanruffing.preference_abstraction.AutoPreferences;
-import com.ethanruffing.preference_abstraction.ConfigurationType;
+import com.ethanruffing.preferenceabstraction.AutoPreferences;
+import com.ethanruffing.preferenceabstraction.ConfigurationType;
 import org.junit.Assert;
 import org.junit.Test;
 
