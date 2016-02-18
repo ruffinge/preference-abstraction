@@ -1,5 +1,8 @@
 Changelog
 =========
+## 0.2.3 ##
+ * Added missing version numbers to two maven dependencies.
+
 ## 0.2.2 ##
  * Fixed some final issues with the `pom.xml`.
 
